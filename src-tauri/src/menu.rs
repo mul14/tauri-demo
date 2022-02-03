@@ -1,42 +1,64 @@
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub fn setup() -> Menu {
-  let separator = MenuItem::Separator;
+  #[cfg(target_os = "macos")]
+  let app_menu = Submenu::new(
+    "",
+    Menu::new()
+      .add_native_item(MenuItem::About(String::from("Tauri Demo")))
+      .add_native_item(MenuItem::Separator)
+      .add_native_item(MenuItem::Services)
+      .add_native_item(MenuItem::Separator)
+      .add_native_item(MenuItem::Hide)
+      .add_native_item(MenuItem::HideOthers)
+      .add_native_item(MenuItem::ShowAll)
+      .add_native_item(MenuItem::Separator)
+      .add_native_item(MenuItem::Quit),
+  );
 
-  let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-  let close = CustomMenuItem::new("close".to_string(), "Close");
-  let about = MenuItem::About("Demo App".to_string());
   let file_menu = Submenu::new(
     "File",
     Menu::new()
-      .add_item(quit)
-      .add_item(close)
-      .add_native_item(about),
+      .add_native_item(MenuItem::About("Demo App".to_string()))
+      .add_item(CustomMenuItem::new("close".to_string(), "Close"))
+      .add_item(CustomMenuItem::new("quit".to_string(), "Quit")),
   );
 
-  let undo = MenuItem::Undo;
-  let redo = MenuItem::Redo;
-  let cut = MenuItem::Cut;
-  let copy = MenuItem::Copy;
-  let paste = MenuItem::Paste;
-  let select_all = MenuItem::SelectAll;
   let edit_menu = Submenu::new(
     "Edit",
     Menu::new()
-      .add_native_item(undo)
-      .add_native_item(redo)
-      .add_native_item(separator.clone())
-      .add_native_item(cut)
-      .add_native_item(copy)
-      .add_native_item(paste)
-      .add_native_item(separator.clone())
-      .add_native_item(select_all),
+      .add_native_item(MenuItem::Undo)
+      .add_native_item(MenuItem::Redo)
+      .add_native_item(MenuItem::Separator)
+      .add_native_item(MenuItem::Cut)
+      .add_native_item(MenuItem::Copy)
+      .add_native_item(MenuItem::Paste)
+      .add_native_item(MenuItem::Separator)
+      .add_native_item(MenuItem::SelectAll),
+  );
+
+  let window_menu = Submenu::new(
+    "Window",
+    Menu::new()
+      .add_native_item(MenuItem::Minimize)
+      .add_native_item(MenuItem::Minimize)
+      .add_native_item(MenuItem::Zoom)
+      .add_native_item(MenuItem::EnterFullScreen),
+  );
+
+  let view_menu = Submenu::new(
+    "View",
+    Menu::new()
+      .add_native_item(MenuItem::EnterFullScreen),
   );
 
   let menu = Menu::new()
-    .add_item(CustomMenuItem::new("somthing", "Something"))
+    .add_submenu(app_menu)
     .add_submenu(file_menu)
-    .add_submenu(edit_menu);
+    .add_submenu(edit_menu)
+    .add_submenu(view_menu)
+    .add_submenu(window_menu)
+    .add_item(CustomMenuItem::new("custom_menu", "Custom Menu"));
 
   return menu;
 }

@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "demo-tauri",
+    "productName": "tauri-demo",
     "version": "0.1.0"
   },
   "build": {

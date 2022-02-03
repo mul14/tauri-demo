@@ -1,9 +1,9 @@
 [package]
 name = "app"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
+description = "A Tauri App Demo"
+authors = ["Mulia Arifandy Nasution"]
+license = "MIT"
 repository = ""
 default-run = "app"
 edition = "2018"

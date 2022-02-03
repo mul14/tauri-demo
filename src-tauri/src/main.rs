@@ -3,6 +3,11 @@
   windows_subsystem = "windows"
 )]
 
+use chrono::Local;
+use std::fs::{read_to_string, OpenOptions};
+use std::io::Write;
+use std::path::Path;
+
 mod menu;
 mod tray;
 
@@ -12,21 +17,54 @@ fn main() {
     .on_menu_event(|event| menu::handler(event))
     .system_tray(tray::setup())
     .on_system_tray_event(|app, event| tray::handler(&app, &event))
-    .invoke_handler(tauri::generate_handler![my_custom_command, write_file])
+    .invoke_handler(tauri::generate_handler![hello_rust, read_file, write_file, http_call])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
 
 #[tauri::command]
-fn my_custom_command() -> String {
+fn hello_rust() -> String {
   println!("Invoked from JavaScript");
 
-  return "Hello from Rust!".into();
+  return "Hello from Rust".into();
 }
 
 #[tauri::command]
-fn write_file() -> String {
-  println!("Write file");
+fn write_file(path: String) -> String {
+  let target_path = Path::new(&path);
 
-  return "Hello from Rust!".into();
+  let unix_timestamp = Local::now();
+
+  println!("{:?}", unix_timestamp.naive_local().timestamp());
+
+  let mut f = OpenOptions::new()
+    .append(true)
+    .create(true)
+    .open(target_path)
+    .expect("Unable to write file");
+
+  let data = unix_timestamp.to_rfc2822() + "\n";
+
+  f.write_all(data.as_bytes()).expect("Unable to write data");
+
+  return data.to_string();
+}
+
+#[tauri::command]
+fn read_file(path: String) -> String {
+  let target_path = Path::new(&path);
+
+  let result = read_to_string(target_path).unwrap_or_default();
+
+  println!("{}", result.to_string());
+
+  return result;
+}
+
+#[tauri::command]
+fn http_call(url: String) -> String {
+
+
+
+  return "".into();
 }

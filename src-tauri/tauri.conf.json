@@ -82,16 +82,19 @@
         "title": "Tauri Demo",
         "width": 800,
         "height": 600,
+        "decorations": true,
         "resizable": true,
         "fullscreen": false,
-        "visible": false
+        "visible": true
       },
       {
-        "width": 400,
+        "title": "Other",
+        "width": 640,
         "height": 200,
         "decorations": false,
-        "url": "splashscreen.html",
-        "label": "splashscreen"
+        "url": "broadcast.html",
+        "label": "broadcast",
+        "visible": false
       }
     ],
     "systemTray": {

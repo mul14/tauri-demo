@@ -11,6 +11,7 @@
     "@tailwindcss/forms": "^0.4.0",
     "@tailwindcss/line-clamp": "^0.3.1",
     "@tauri-apps/api": "^1.0.0-beta.8",
+    "broadcast-channel": "^4.10.0",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#f36f392d889c5d27092971a6e82f2d9822b18eae",
     "tauri-plugin-store-api": "github:tauri-apps/tauri-plugin-store#1093d1ed30140c71e8b9e5096196f2a3343fb02d",
     "vue": "^3.2.25"

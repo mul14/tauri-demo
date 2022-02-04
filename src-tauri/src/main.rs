@@ -24,7 +24,9 @@ fn main() {
       hello_rust,
       read_file,
       write_file,
-      notify
+      notify,
+      open_window,
+      hide_broadcast_window
     ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
@@ -77,6 +79,26 @@ fn notify(title: String, body: String) {
     .show();
 
   println!("{:?}", result);
+}
+
+
+#[tauri::command]
+fn open_window(window: tauri::Window) {
+  if let Some(broadcast) = window.get_window("broadcast") {
+    broadcast.show().unwrap();
+  }
+}
+
+#[tauri::command]
+fn hide_broadcast_window(window: tauri::Window) {
+
+  println!("{:?}", "hide_broadcast_window");
+
+  if let Some(broadcast) = window.get_window("broadcast") {
+    broadcast.hide().unwrap();
+  }
+
+  window.get_window("main").unwrap().show().unwrap();
 }
 
 #[tauri::command]

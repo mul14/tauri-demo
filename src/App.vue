@@ -1,10 +1,21 @@
 <script setup lang="ts">
 import { invoke } from '@tauri-apps/api/tauri'
 import { dialog, fs, path, notification } from '@tauri-apps/api'
+import { ref, onMounted } from 'vue'
+import { BroadcastChannel } from 'broadcast-channel';
 import TButton from './components/TButton.vue';
+
+const logs = ref<string[]>([])
+const channel = new BroadcastChannel('work');
 
 const helloRust = async () => {
   console.log(await invoke('hello_rust'))
+}
+
+const openWindow = async () => {
+  await invoke('open_window', {
+    label: 'broadcast'
+  })
 }
 
 const nofity = async () => {
@@ -40,7 +51,7 @@ const writeFile = async () => {
 
 const readFile = async () => {
   const result = await invoke('read_file', {
-    path: "/Users/mul14/.zshrc"
+    path: "/Users/mul14/.bashrc"
   })
 
   console.log(result)
@@ -66,6 +77,16 @@ const readDir = async () => {
   })
   console.log(result)
 }
+
+onMounted(() => {
+  channel.onmessage = (message: string) => {
+    logs.value.push(message)
+    console.log('Received', message)
+  }
+
+  channel.postMessage('Broadcast message from main-window');
+})
+
 </script>
 
 <template>
@@ -75,10 +96,16 @@ const readDir = async () => {
       <TButton @click="openDialog">Open Dialog</TButton>
       <TButton @click="readDir">Read Directory</TButton>
       <TButton @click="writeFile">Append date to ~/sample.txt</TButton>
-      <TButton @click="readFile">Read ~/.zshrc</TButton>
+      <TButton @click="readFile">Read ~/.bashrc</TButton>
       <TButton @click="nofity">Notification</TButton>
       <TButton @click="httpGet">HTTP GET</TButton>
       <TButton @click="httpPost">HTTP POST</TButton>
+      <TButton @click="openWindow">Open Window</TButton>
+    </div>
+    <div class="p-4 border m-4">
+      <div v-for="(log, index) in logs" :key="index" class="text-left">
+        {{ log }}
+      </div>
     </div>
   </div>
 </template>

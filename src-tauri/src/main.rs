@@ -9,13 +9,18 @@ use std::fs::{read_to_string, OpenOptions};
 use std::io::Write;
 use std::path::Path;
 use tauri::Manager;
+use tauri::WindowBuilder;
 
 mod menu;
 mod tray;
 
 fn main() {
   tauri::Builder::default()
-    .menu(menu::setup())
+    .create_window(
+      "main".to_string(),
+      tauri::WindowUrl::App("index.html".into()),
+      move |window_builder, webview_attributes| (window_builder.menu(menu::setup()), webview_attributes),
+    )
     .on_menu_event(|event| menu::handler(event))
     .system_tray(tray::setup())
     .on_system_tray_event(|app, event| tray::handler(&app, &event))

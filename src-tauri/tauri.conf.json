@@ -79,15 +79,6 @@
     },
     "windows": [
       {
-        "title": "Tauri Demo",
-        "width": 800,
-        "height": 600,
-        "decorations": true,
-        "resizable": true,
-        "fullscreen": false,
-        "visible": true
-      },
-      {
         "title": "Other",
         "width": 640,
         "height": 200,

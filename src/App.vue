@@ -1,9 +1,33 @@
 <script setup lang="ts">
 import { invoke } from '@tauri-apps/api/tauri'
-import { dialog, fs, path } from '@tauri-apps/api'
+import { dialog, fs, path, notification } from '@tauri-apps/api'
+import TButton from './components/TButton.vue';
 
 const helloRust = async () => {
   console.log(await invoke('hello_rust'))
+}
+
+const nofity = async () => {
+  const result = await invoke('notify', {
+    title: "Hello from Tauri",
+    body: "You have a message",
+  })
+}
+
+const httpPost = async () => {
+  const result = await invoke('http_post', {
+    url: "https://httpbin.org/post"
+  })
+
+  console.log(result)
+}
+
+const httpGet = async () => {
+  const result = await invoke('http_get', {
+    url: "https://httpbin.org/get"
+  })
+
+  console.log(result)
 }
 
 const writeFile = async () => {
@@ -47,26 +71,14 @@ const readDir = async () => {
 <template>
   <div class="max-w-xl mx-auto">
     <div class="grid grid-cols-3 gap-4">
-      <button
-        class="px-4 py-2 from-gray-900 to-gray-800 bg-gray-700 hover:bg-gray-900 active:outline-dotted active:outline-gray-700 text-white rounded-lg"
-        @click="helloRust"
-      >Send to Rust</button>
-      <button
-        class="px-4 py-2 from-gray-900 to-gray-800 bg-gray-700 hover:bg-gray-900 active:outline-dotted active:outline-gray-700 text-white rounded-lg"
-        @click="openDialog"
-      >Open Dialog</button>
-      <button
-        class="px-4 py-2 from-gray-900 to-gray-800 bg-gray-700 hover:bg-gray-900 active:outline-dotted active:outline-gray-700 text-white rounded-lg"
-        @click="readDir"
-      >Read Directory</button>
-      <button
-        class="px-4 py-2 from-gray-900 to-gray-800 bg-gray-700 hover:bg-gray-900 active:outline-dotted active:outline-gray-700 text-white rounded-lg"
-        @click="writeFile"
-      >Append date to ~/sample.txt</button>
-      <button
-        class="px-4 py-2 from-gray-900 to-gray-800 bg-gray-700 hover:bg-gray-900 active:outline-dotted active:outline-gray-700 text-white rounded-lg"
-        @click="readFile"
-      >Read ~/.zshrc</button>
+      <TButton @click="helloRust">Send to Rust</TButton>
+      <TButton @click="openDialog">Open Dialog</TButton>
+      <TButton @click="readDir">Read Directory</TButton>
+      <TButton @click="writeFile">Append date to ~/sample.txt</TButton>
+      <TButton @click="readFile">Read ~/.zshrc</TButton>
+      <TButton @click="nofity">Notification</TButton>
+      <TButton @click="httpGet">HTTP GET</TButton>
+      <TButton @click="httpPost">HTTP POST</TButton>
     </div>
   </div>
 </template>

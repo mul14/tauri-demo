@@ -46,7 +46,7 @@
       }
     },
     "updater": {
-      "active": true,
+      "active": false,
       "endpoints": [
         "https://nasution.id/{{target}}/{{current_version}}"
       ],
@@ -72,6 +72,9 @@
         "removeDir": true,
         "removeFile": true,
         "renameFile": true
+      },
+      "notification": {
+        "all": true
       }
     },
     "windows": [

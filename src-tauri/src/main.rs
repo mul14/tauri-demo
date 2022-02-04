@@ -4,6 +4,7 @@
 )]
 
 use chrono::Local;
+use notify_rust::Notification;
 use std::fs::{read_to_string, OpenOptions};
 use std::io::Write;
 use std::path::Path;
@@ -17,7 +18,7 @@ fn main() {
     .on_menu_event(|event| menu::handler(event))
     .system_tray(tray::setup())
     .on_system_tray_event(|app, event| tray::handler(&app, &event))
-    .invoke_handler(tauri::generate_handler![hello_rust, read_file, write_file, http_call])
+    .invoke_handler(tauri::generate_handler![hello_rust, read_file, write_file, notify])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -62,9 +63,11 @@ fn read_file(path: String) -> String {
 }
 
 #[tauri::command]
-fn http_call(url: String) -> String {
+fn notify(title: String, body: String) {
+  let result = Notification::new()
+    .summary(title.as_str())
+    .body(body.as_str())
+    .show();
 
-
-
-  return "".into();
+  println!("{:?}", result);
 }

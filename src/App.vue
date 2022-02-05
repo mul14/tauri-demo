@@ -42,24 +42,30 @@ const httpGet = async () => {
 }
 
 const writeFile = async () => {
+  const homeDir = await path.homeDir()
+
   const result = await invoke('write_file', {
-    path: "/Users/mul14/sample.txt"
+    path: `${homeDir}/sample.txt`
   })
 
   console.log(result)
 }
 
 const readFile = async () => {
+  const homeDir = await path.homeDir()
+
   const result = await invoke('read_file', {
-    path: "/Users/mul14/.bashrc"
+    path: `${homeDir}/.bashrc`
   })
 
   console.log(result)
 }
 
 const openDialog = async () => {
+  const downloadDir = await path.downloadDir()
+
   const result = await dialog.save({
-    defaultPath: "/Users/mul14/sample.txt"
+    defaultPath: `${downloadDir}/sample.txt`
   })
 
   console.log(result)
@@ -80,7 +86,7 @@ const readDir = async () => {
 
 onMounted(() => {
   channel.onmessage = (message: string) => {
-    logs.value.push(message)
+    logs.value.unshift(message)
     console.log('Received', message)
   }
 

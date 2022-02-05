@@ -17,7 +17,7 @@ onMounted(() => {
 })
 
 const sendMessage = () => {
-  channel.postMessage(message.value)
+  channel.postMessage(String(Date.now()) + ' ' + message.value)
   message.value = ''
 }
 </script>

@@ -1,7 +1,8 @@
 use tauri::{CustomMenuItem, Menu, MenuItem, Submenu};
 
 pub fn setup() -> Menu {
-  #[cfg(target_os = "macos")]
+
+  #![allow(unused_variables)]
   let app_menu = Submenu::new(
     "",
     Menu::new()
@@ -52,8 +53,17 @@ pub fn setup() -> Menu {
       .add_native_item(MenuItem::EnterFullScreen),
   );
 
+  #[cfg(target_os = "macos")]
   let menu = Menu::new()
     .add_submenu(app_menu)
+    .add_submenu(file_menu)
+    .add_submenu(edit_menu)
+    .add_submenu(view_menu)
+    .add_submenu(window_menu)
+    .add_item(CustomMenuItem::new("custom_menu", "Custom Menu"));
+
+  #[cfg(not(target_os = "macos"))]
+  let menu = Menu::new()
     .add_submenu(file_menu)
     .add_submenu(edit_menu)
     .add_submenu(view_menu)

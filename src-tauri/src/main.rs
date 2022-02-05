@@ -16,6 +16,13 @@ mod tray;
 
 fn main() {
   tauri::Builder::default()
+    .setup(|app| {
+      let main_window = app.get_window("main").unwrap();
+
+      main_window.set_title("Tauri Demo").unwrap();
+
+      Ok(())
+    })
     .create_window(
       "main".to_string(),
       tauri::WindowUrl::App("index.html".into()),

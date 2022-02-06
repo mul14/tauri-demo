@@ -19,7 +19,11 @@ fn main() {
     .setup(|app| {
       let main_window = app.get_window("main").unwrap();
 
-      main_window.set_title("Tauri Demo").unwrap();
+      let version = app.package_info().version.to_string();
+      let mut title = "Tauri Demo v".to_string();
+      title.push_str(&version);
+
+      main_window.set_title(&title).unwrap();
 
       Ok(())
     })
